@@ -4,6 +4,7 @@
  *  Created on: 2011-10-14
  *      Author: liyajie
  */
+#include <unistd.h>
 #include "src/threadpool.h"
 /**
  * 客户定制的线程执行方法,
@@ -12,12 +13,21 @@
  * @return value
  */
 void * client_thread_fun(void * param) {
-
+	printf("threadid is 0x%x, working on task %d\n", pthread_self(),
+			*(int *) param);
+	sleep(1);/*休息一秒，延长任务的执行时间*/
 	return NULL;
 }
 
-int main(int arg,char *ags[]) {
+int main(int arg, char *ags[]) {
 
-	init(3,client_thread_fun);
+	init(3);//初始化完成后，创建任务
+	int i;
+	for (i = 0; i < 5; i++) {
+		add_worker(client_thread_fun, &i);
+	}
+
+	sleep(3);
+	destroy();
 	return 0;
 }

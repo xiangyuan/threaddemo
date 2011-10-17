@@ -10,7 +10,45 @@
 
 static Pool *pool = NULL;
 
-void init(int maxnum, thread_routine fun_method) {
+/**
+ * the thread will invoke this method
+ * @return
+ */
+extern void * thread_loop() {
+	/*get the current thread's id*/
+	printf("start the thread 0x%x\n", pthread_self());
+	//get into a loop
+	while (1) {
+		while (pool->taskNum == 0 && !pool->isShutdown) {//have no task
+			printf("thread 0x%x is waiting\n", pthread_self());
+			//wait to add task
+			pthread_cond_wait(&(pool->condLock), &(pool->isShutdown));
+		}
+		if (pool->isShutdown) {//关闭
+			pthread_mutex_unlock(&(pool->lock));
+			printf("thread 0x%x will exit\n", pthread_self());
+			pthread_exit(NULL);
+		}
+		/*now is normal mode*/
+		printf("thread 0x%x is starting to work\n", pthread_self());
+		/*assert是调试的好帮手*/
+		assert (pool->taskNum != 0);
+		assert (pool->workers != NULL);
+		//get a worker to run
+		Worker *task = pool->workers;
+		pool->taskNum--;
+		pool->workers = task->next;
+		pthread_mutex_unlock(&(pool->lock));
+
+		//执行任务
+		(*(task->proccess))(task->param);
+		free(task);
+		task = NULL;
+	}
+	pthread_exit(NULL);
+}
+
+void init(int maxnum) {
 	if (pool == NULL) {
 		pool = malloc(sizeof(Pool));
 	}
@@ -24,7 +62,8 @@ void init(int maxnum, thread_routine fun_method) {
 	//创建线程
 	int i;
 	for (i = 0; i < maxnum; i++) {
-		pthread_create(&(pool->threads[i]), NULL, fun_method, NULL);
+		/*the third parameter is the thread will invoked method*/
+		pthread_create(&(pool->threads[i]), NULL, thread_loop, NULL);
 	}
 }
 
@@ -50,9 +89,8 @@ int add_worker(void * (*proccess)(void *), void *param) {
 }
 /**
  * destroy the thread pool
- * @param pool
  */
-int destroy(Pool *pool) {
+int destroy() {
 	if (pool->isShutdown)
 		return -1;
 	pool->isShutdown = TRUE;//关闭，然后清除资源

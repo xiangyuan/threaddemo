@@ -42,7 +42,6 @@ struct Thread_Pool {
 	pthread_t *threads;//所有的线程
 	Worker * workers;//工作者,所有等待的线程
 	int isShutdown;
-	pthread_mutex_t mutexLock;
 	pthread_cond_t condLock;
 	int maxSize;
 	int taskNum;//任务数
@@ -50,9 +49,8 @@ struct Thread_Pool {
 /**
  * 初始化线程pool
  * @param maxnum the max size of the pool
- * @param client implements the function method
  */
-void init(int maxnum,thread_routine spefunction);
+void init(int maxnum);
 /**
  * add a worker to the pool
  */
@@ -61,6 +59,6 @@ int add_worker(void * (*proccess)(void *),void *param);
  * destroy the thread pool
  * @param pool
  */
-int destroy(Pool *pool);
+int destroy();
 
 #endif /* THREADPOOL_H_ */
