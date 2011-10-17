@@ -38,7 +38,7 @@ void * consumer(PvData *container) {
 	}
 	return NULL;
 }
-int main(int arg, char *ags[]) {
+//int main(int arg, char *ags[]) {
 
 	//	init(3);//初始化完成后，创建任务
 	//	int i;
@@ -52,17 +52,17 @@ int main(int arg, char *ags[]) {
 
 	/*now is the pv test
 	 * */
-	PvData data;
-	pthread_t a,b;
-	int retval;
-	initPv(&data);
-	/* 创建生产者和消费者线程*/
-	pthread_create(&a, NULL, productor, &data);
-	pthread_create(&b, NULL, consumer, &data);
-	/* 等待两个线程结束*/
-	pthread_join(a, &retval);
-	pthread_join(b, &retval);
-
-	destryPv(&data);
-	return 0;
-}
+//	PvData data;
+//	pthread_t a,b;
+//	int retval;
+//	initPv(&data);
+//	/* 创建生产者和消费者线程*/
+//	pthread_create(&a, NULL, productor, &data);
+//	pthread_create(&b, NULL, consumer, &data);
+//	/* 等待两个线程结束*/
+//	pthread_join(a, &retval);
+//	pthread_join(b, &retval);
+//
+//	destryPv(&data);
+//	return 0;
+//}
