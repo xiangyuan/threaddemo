@@ -1,0 +1,18 @@
+ System.out.println("S:" + sockin.readLine());                    
+|-POP3Demo.java                |            sockout.println("helo");                                         
+|-SMTPDemo.java                |            System.out.println("S:" + sockin.readLine());                    
+|-SocketDemo.java              |            sockout.println("mail from: " + "<" + SMTPDemo.sender + ">");    
+|-StringDemo.java              |            System.out.println("S:" + sockin.readLine());                    
+`-WorkTest.java                |            sockout.println("rcpt to: " + "<" + SMTPDemo.receiver + ">");    
+~                              |            System.out.println("S:" + sockin.readLine());                    
+~                              |            sockout.println("data");                                         
+~                              |            //发送邮件标题                                                   
+~                              |            sockout.println("subject: 你好");                                
+~                              |                                                                             
+~                              |            //发送邮件内容                                                   
+~                              |            sockout.println("我做的一个测试");                               
+~                              |            sockout.println("我是亚杰");                                     
+~                              |            //此处的.为特殊标记，表示邮件结束                                
+~                              |            sockout.println(".");                                            
+~                              |            sockout.println("rset");                                         
+~                              |            sockout.println("quit");

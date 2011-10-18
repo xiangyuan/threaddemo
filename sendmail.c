@@ -5,6 +5,8 @@
  *      Author: liyajie
  */
 #include "sm/simple_smtp.h"
+#include <stdio.h>
+#include <arpa/inet.h>
 #include <stdlib.h>
 #include <netdb.h>
 
@@ -13,6 +15,20 @@ int main(int argv, char * args[]) {
 	const char* sender = "365283170@qq.com";
 	const char *receiver = "liyj2@wondershare.cn";
 	const char *server = "smtp.wondershare.cn";
+//	struct sockaddr_in address;
+//	int sockfd = socket(AF_INET, SOCK_STREAM, 0);
+//	address.sin_family = AF_INET;
+//	address.sin_addr.s_addr = inet_addr("192.168.10.8");
+//	printf("the saddr %d\n",address.sin_addr.s_addr);
+//	address.sin_port = htons(25);
+//	int len = sizeof(address);
+//	int result = connect(sockfd,  (struct sockaddr *)&address, len);
+//	if(result == -1){
+//	    perror("oops: client1");
+//	    return 1;
+//	} else {
+//		printf("the socket is create ok!\n");
+//	}
 //	struct hostent *host = gethostbyname(server);
 //	struct in_addr inaddress;
 //	//将所在地址的值拷贝到in_addr数据中
