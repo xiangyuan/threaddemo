@@ -42,7 +42,7 @@ int main(int argv, char * args[]) {
 	transport->smptserver = strdup(server);
 
 	mail_init(transport);
-	boolean isOk = (*(transport->sendMail))(transport,"test","hello are you ok?");
+	boolean isOk = (*(transport->sendMail))(transport,"美丽","人通过美丽");
 	printf("is ok %d\n",isOk);
 
 	mail_free(transport);

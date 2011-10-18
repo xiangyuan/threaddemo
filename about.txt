@@ -16,3 +16,4 @@
 ~                              |            sockout.println(".");                                            
 ~                              |            sockout.println("rset");                                         
 ~                              |            sockout.println("quit");
+liyj2@wondershare.cn

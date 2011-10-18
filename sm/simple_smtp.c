@@ -40,13 +40,9 @@ boolean send_mail(Transport * email, const char *subject, const char *content) {
 	struct in_addr inaddress;
 	//将所在地址的值拷贝到in_addr数据中
 	memcpy(&(inaddress.s_addr), host->h_addr, 4);
-	printf("%s", inet_ntoa(inaddress));
 	server.sin_family = AF_INET;
-	printf("the port is %d\n", SMPT_PORT);
 	server.sin_port = htons(SMPT_PORT);
-	printf("%s", inet_ntoa(inaddress));
 	server.sin_addr.s_addr = inet_addr(inet_ntoa(inaddress));
-	printf("the saddr %d\n", server.sin_addr.s_addr);
 	//	int re = bind(sockb,&server,sizeof(struct sockaddr_in));
 	int re = connect(sockb, (struct sockaddr *) &server,
 			sizeof(struct sockaddr_in));
@@ -54,29 +50,28 @@ boolean send_mail(Transport * email, const char *subject, const char *content) {
 		perror("socket bind error!\n");
 	}
 	char * buff = malloc(sizeof(char *));
-	int len = recv(sockb, buff, sizeof(char *), 0);
-	printf("the recv msg%s\n", buff);
+	int len = recv(sockb, buff, 1024, 0);
+
 	len = send(sockb, "helo", strlen("helo"), 0);
 	send(sockb, "\r\n", strlen("\r\n"), 0);
-	printf("the send len %d\n", len);
-	printf("the buff %s\n", buff);
-	len = recv(sockb, buff, 2048, 0);
-	printf("the msg %s\n", buff);
+	//helo命令
+	memset(buff,0,strlen(buff));
+	len = recv(sockb, buff, 1024, 0);
 
 	const char * sender = "mail from: <365283170@qq.com>";
 	len = send(sockb, sender, strlen(sender), 0);
 	send(sockb, "\r\n", strlen("\r\n"), 0);
-	char senbuf[2048];
-	len = recv(sockb, senbuf, 2048, 0);
-	printf("the sender msg %s\n", senbuf);
+	memset(buff,0,strlen(buff));
+	len = recv(sockb, buff, 1024, 0);
+	printf("the sender msg %s\n", buff);
 
-	char rebuf[2048];
+	memset(buff,0,strlen(buff));
 	const char * receiver = "rcpt to: <liyj2@wondershare.cn>";
 	len = send(sockb, receiver, strlen(receiver), 0);
 
 	send(sockb, "\r\n", strlen("\r\n"), 0);
-	len = recv(sockb, rebuf, 2048, 0);
-	printf("the receiver msg %s\n", rebuf);
+	len = recv(sockb, buff, 1024, 0);
+	printf("the receiver msg %s\n", buff);
 
 //	const char * two = "rcp to: <liyj2@wondershare.cn>";
 //	len = send(sockb, two, strlen(two), 0);
@@ -87,11 +82,9 @@ boolean send_mail(Transport * email, const char *subject, const char *content) {
 
 	len = send(sockb, "data", strlen("data"), 0);
 	send(sockb, "\r\n", strlen("\r\n"), 0);
-	printf("the send len %d\n", len);
 
-	len = send(sockb, "suject:你好", strlen("suject:你好"), 0);
+	len = send(sockb, "subject:你好", strlen("subject:你好"), 0);
 	send(sockb, "\r\n", strlen("\r\n"), 0);
-	printf("the send len %d\n", len);
 
 	send(sockb, subject, strlen(subject), 0);
 	send(sockb, "\r\n", strlen("\r\n"), 0);
@@ -106,7 +99,7 @@ boolean send_mail(Transport * email, const char *subject, const char *content) {
 	isOk = 1;
 
 	printf("the isOk is %d\n", isOk);
-
+	free(buff);
 	close(sockb);
 	return (isOk);
 }
