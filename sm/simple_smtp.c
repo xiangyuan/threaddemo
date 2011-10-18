@@ -57,6 +57,7 @@ boolean send_mail(Transport * email, const char *subject, const char *content) {
 	int len = recv(sockb, buff, sizeof(char *), 0);
 	printf("the recv msg%s\n", buff);
 	len = send(sockb, "helo", strlen("helo"), 0);
+	send(sockb, "\r\n", strlen("\r\n"), 0);
 	printf("the send len %d\n", len);
 	printf("the buff %s\n", buff);
 	len = recv(sockb, buff, 2048, 0);
@@ -64,35 +65,47 @@ boolean send_mail(Transport * email, const char *subject, const char *content) {
 
 	const char * sender = "mail from: <365283170@qq.com>";
 	len = send(sockb, sender, strlen(sender), 0);
-char senbuf[2048];
+	send(sockb, "\r\n", strlen("\r\n"), 0);
+	char senbuf[2048];
 	len = recv(sockb, senbuf, 2048, 0);
 	printf("the sender msg %s\n", senbuf);
 
+	char rebuf[2048];
 	const char * receiver = "rcpt to: <liyj2@wondershare.cn>";
 	len = send(sockb, receiver, strlen(receiver), 0);
-	//send(sockb,"\n",strlen("\n"),0);
-	printf("the receiver len %d\n", len);
-	printf("the buff %s\n", buff);
-	len = recv(sockb, buff, 2048, 0);
-	printf("the msg %s\n", buff);
+
+	send(sockb, "\r\n", strlen("\r\n"), 0);
+	len = recv(sockb, rebuf, 2048, 0);
+	printf("the receiver msg %s\n", rebuf);
+
+//	const char * two = "rcp to: <liyj2@wondershare.cn>";
+//	len = send(sockb, two, strlen(two), 0);
+//
+//	send(sockb, "\r\n", strlen("\r\n"), 0);
+//	len = recv(sockb, rebuf, 2048, 0);
+//	printf("the receiver msg %s\n", rebuf);
 
 	len = send(sockb, "data", strlen("data"), 0);
+	send(sockb, "\r\n", strlen("\r\n"), 0);
 	printf("the send len %d\n", len);
 
 	len = send(sockb, "suject:你好", strlen("suject:你好"), 0);
+	send(sockb, "\r\n", strlen("\r\n"), 0);
 	printf("the send len %d\n", len);
 
-	len = send(sockb, "suject:你好", strlen("suject:你好"), 0);
-	printf("the send len %d\n", len);
-
-	send(sockb,subject,strlen(subject),0);
-	send(sockb,content,strlen(content),0);
+	send(sockb, subject, strlen(subject), 0);
+	send(sockb, "\r\n", strlen("\r\n"), 0);
+	send(sockb, content, strlen(content), 0);
+	send(sockb, "\r\n", strlen("\r\n"), 0);
 	send(sockb, ".", strlen("."), 0);
+	send(sockb, "\r\n", strlen("\r\n"), 0);
 	send(sockb, "rset", strlen("rset"), 0);
+	send(sockb, "\r\n", strlen("\r\n"), 0);
 	send(sockb, "quit", strlen("quit"), 0);
+	send(sockb, "\r\n", strlen("\r\n"), 0);
 	isOk = 1;
 
-printf("the isOk is %d\n",isOk);
+	printf("the isOk is %d\n", isOk);
 
 	close(sockb);
 	return (isOk);
